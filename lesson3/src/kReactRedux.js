@@ -8,16 +8,16 @@ import React, {
 } from "react";
 
 // 想要使用Context传递数据
-// todo step1: 先创建一个Context对象
+// ! step1: 先创建一个Context对象
 const Context = React.createContext();
 
-// todo step2: 通过Provider组件传递context value
+// ! step2: 通过Provider组件传递context value
 export function Provider({children, store}) {
   return <Context.Provider value={store}>{children}</Context.Provider>;
 }
 
-// todo step3: 子组件接收context value
-// todo step3-1: 用connect
+// ! step3: 子组件接收context value
+// ! step3-1: 用connect
 // connect 是个hoc，接收组件作为参数，然后返回一个新组件，
 // 新的组件上可以由你自己选择映射state和dispatch
 export const connect = (
@@ -41,16 +41,17 @@ export const connect = (
   }
 
   // 组件得更新
-  // const [, forceUpdate] = useState({});
-  // const [ignored, forceUpdate] = useState(0);
-  // const [, forceUpdate] = useReducer(x => x + 1, 0);
+  // 1. const [, forceUpdate] = useState({});
+  // 2. const [ignored, forceUpdate] = useState(0);
+  // 3. const [, forceUpdate] = useReducer(x => x + 1, 0);
   const forceUpdate = useForceUpdate();
 
   //这里选择useLayoutEffect而不是useEffect，是因为useEffect在组件更新完之后会有延迟，有可能会漏掉一些forceUpdate
   useLayoutEffect(() => {
     const unsubscribe = store.subscribe(() => {
-      // forceUpdate(ignored => ignored + 1);
-      forceUpdate();
+      // 1. forceUpdate({})
+      // 2. forceUpdate(ignored => ignored + 1);
+      forceUpdate(); // 3
     });
 
     // 这个函数在组件将要卸载的时候执行
@@ -88,7 +89,7 @@ export function bindActionCreators(creators, dispatch) {
   return obj;
 }
 
-// todo step3-2: 用hook方法
+// ! step3-2: 用hook方法
 export function useSelector(selector) {
   const store = useStore();
 
